@@ -25,7 +25,8 @@ func New(docType string, options *Options) (*Document, error) {
 	}
 
 	// Prepare pdf
-	doc.pdf = fpdf.New("P", "mm", "A4", "")
+
+	doc.pdf = fpdf.New("P", "mm", options.PageSize, "")
 	doc.Options.UnicodeTranslateFunc = doc.pdf.UnicodeTranslatorFromDescriptor("")
 
 	// Prepare accounting

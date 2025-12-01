@@ -5,7 +5,8 @@ type UnicodeTranslateFunc func(string) string
 
 // Options for Document
 type Options struct {
-	AutoPrint bool `json:"auto_print,omitempty"`
+	AutoPrint bool   `json:"auto_print,omitempty"`
+	PageSize  string `default:"A4" json:"page_size,omitempty"`
 
 	CurrencySymbol    string `default:"€ " json:"currency_symbol,omitempty"`
 	CurrencyPrecision int    `default:"2" json:"currency_precision,omitempty"`
