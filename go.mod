@@ -1,8 +1,9 @@
-module github.com/angelodlfrtr/go-invoice-generator
+module github.com/acsellers/go-invoice-generator
 
 go 1.17
 
 require (
+	github.com/acsellers/go-invoice-generator v0.6.0
 	github.com/creasty/defaults v1.6.0
 	github.com/go-pdf/fpdf v0.6.0
 	github.com/go-playground/validator/v10 v10.11.0
