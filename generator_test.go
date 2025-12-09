@@ -56,7 +56,7 @@ func TestNew(t *testing.T) {
 	doc.SetCompany(&Contact{
 		Name: "Test Company",
 		Logo: logoBytes,
-		Address: &Address{
+		Info: &Address{
 			Address:    "89 Rue de Brest",
 			Address2:   "Appartement 2",
 			PostalCode: "75000",
@@ -68,7 +68,7 @@ func TestNew(t *testing.T) {
 
 	doc.SetCustomer(&Contact{
 		Name: "Test Customer",
-		Address: &Address{
+		Info: &Address{
 			Address:    "89 Rue de Paris",
 			PostalCode: "29200",
 			City:       "Brest",

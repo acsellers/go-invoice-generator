@@ -45,3 +45,34 @@ func (a *Address) ToString() string {
 
 	return addrString
 }
+
+func (a *Address) Lines() int {
+	lines := 0
+	if len(a.Address) > 0 {
+		lines++
+	}
+
+	if len(a.Address2) > 0 {
+		lines++
+	}
+
+	if len(a.State) > 0 {
+		lines++
+	} else {
+		if len(a.PostalCode) > 0 {
+			lines++
+		} else {
+			lines++
+		}
+
+		if len(a.City) > 0 {
+			lines++
+		}
+	}
+
+	if len(a.Country) > 0 {
+		lines++
+	}
+
+	return lines
+}

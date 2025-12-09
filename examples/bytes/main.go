@@ -39,7 +39,7 @@ func main() {
 
 	doc.SetCompany(&generator.Contact{
 		Name: "Test Company",
-		Address: &generator.Address{
+		Info: &generator.Address{
 			Address:    "89 Rue de Brest",
 			Address2:   "Appartement 2",
 			PostalCode: "75000",
@@ -50,7 +50,7 @@ func main() {
 
 	doc.SetCustomer(&generator.Contact{
 		Name: "Test Customer",
-		Address: &generator.Address{
+		Info: &generator.Address{
 			Address:    "89 Rue de Paris",
 			PostalCode: "29200",
 			City:       "Brest",

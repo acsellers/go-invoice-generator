@@ -10,12 +10,17 @@ import (
 
 // Contact contact a company informations
 type Contact struct {
-	Name    string   `json:"name,omitempty" validate:"required,min=1,max=256"`
-	Logo    []byte   `json:"logo,omitempty"` // Logo byte array
-	Address *Address `json:"address,omitempty"`
+	Name string `json:"name,omitempty" validate:"required,min=1,max=256"`
+	Logo []byte `json:"logo,omitempty"` // Logo byte array
+	Info Info   `json:"address,omitempty"`
 
 	// AddtionnalInfo to append after contact informations. You can use basic html here (bold, italic tags).
 	AddtionnalInfo []string `json:"additional_info,omitempty"`
+}
+
+type Info interface {
+	Lines() int
+	ToString() string
 }
 
 // appendContactTODoc append the contact to the document
@@ -74,24 +79,16 @@ func (c *Contact) appendContactTODoc(
 	doc.pdf.Cell(40, 8, doc.encodeString(c.Name))
 	doc.pdf.SetFont(doc.Options.Font, "", 10)
 
-	if c.Address != nil {
+	if c.Info != nil {
 		// Address rect
-		var addrRectHeight float64 = 17
-
-		if len(c.Address.Address2) > 0 {
-			addrRectHeight = addrRectHeight + 5
-		}
-
-		if len(c.Address.Country) == 0 {
-			addrRectHeight = addrRectHeight - 5
-		}
+		var addrRectHeight float64 = 5*float64(c.Info.Lines()) + 2
 
 		doc.pdf.Rect(x, doc.pdf.GetY()+9, 70, addrRectHeight, "F")
 
 		// Set address
 		doc.pdf.SetFont(doc.Options.Font, "", 10)
 		doc.pdf.SetXY(x, doc.pdf.GetY()+10)
-		doc.pdf.MultiCell(70, 5, doc.encodeString(c.Address.ToString()), "0", "L", false)
+		doc.pdf.MultiCell(70, 5, doc.encodeString(c.Info.ToString()), "0", "L", false)
 	}
 
 	// Addtionnal info
