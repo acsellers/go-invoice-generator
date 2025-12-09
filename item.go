@@ -115,7 +115,7 @@ func (i *Item) appendColTo(options *Options, doc *Document) {
 	// Name
 	doc.pdf.SetX(ItemColNameOffset)
 	doc.pdf.MultiCell(
-		ItemColUnitPriceOffset-ItemColNameOffset,
+		ItemColNameWidth,
 		3,
 		doc.encodeString(i.Name),
 		"",
@@ -136,7 +136,7 @@ func (i *Item) appendColTo(options *Options, doc *Document) {
 		)
 
 		doc.pdf.MultiCell(
-			ItemColUnitPriceOffset-ItemColNameOffset,
+			ItemColUnitPriceWidth,
 			3,
 			doc.encodeString(i.Description),
 			"",
@@ -160,7 +160,7 @@ func (i *Item) appendColTo(options *Options, doc *Document) {
 	doc.pdf.SetY(baseY)
 	doc.pdf.SetX(ItemColUnitPriceOffset)
 	doc.pdf.CellFormat(
-		ItemColQuantityOffset-ItemColUnitPriceOffset,
+		ItemColUnitPriceWidth,
 		colHeight,
 		doc.encodeString(doc.ac.FormatMoneyDecimal(i._unitCost)),
 		"0",
@@ -174,7 +174,7 @@ func (i *Item) appendColTo(options *Options, doc *Document) {
 	// Quantity
 	doc.pdf.SetX(ItemColQuantityOffset)
 	doc.pdf.CellFormat(
-		ItemColTaxOffset-ItemColQuantityOffset,
+		ItemColQuantityWidth,
 		colHeight,
 		doc.encodeString(i._quantity.String()),
 		"0",
@@ -189,7 +189,7 @@ func (i *Item) appendColTo(options *Options, doc *Document) {
 		// Total HT
 		doc.pdf.SetX(ItemColTotalHTOffset)
 		doc.pdf.CellFormat(
-			ItemColTaxOffset-ItemColTotalHTOffset,
+			ItemColTotalHTWidth,
 			colHeight,
 			doc.encodeString(doc.ac.FormatMoneyDecimal(i.TotalWithoutTaxAndWithoutDiscount())),
 			"0",
@@ -206,7 +206,7 @@ func (i *Item) appendColTo(options *Options, doc *Document) {
 		doc.pdf.SetX(ItemColDiscountOffset)
 		if i.Discount == nil {
 			doc.pdf.CellFormat(
-				ItemColTotalTTCOffset-ItemColDiscountOffset,
+				ItemColDiscountWidth,
 				colHeight,
 				doc.encodeString("--"),
 				"0",
@@ -241,7 +241,7 @@ func (i *Item) appendColTo(options *Options, doc *Document) {
 			// discount title
 			// lastY := doc.pdf.GetY()
 			doc.pdf.CellFormat(
-				ItemColTotalTTCOffset-ItemColDiscountOffset,
+				ItemColDiscountWidth,
 				colHeight/2,
 				doc.encodeString(discountTitle),
 				"0",
@@ -290,7 +290,7 @@ func (i *Item) appendColTo(options *Options, doc *Document) {
 		if i.Tax == nil {
 			// If no tax
 			doc.pdf.CellFormat(
-				ItemColDiscountOffset-ItemColTaxOffset,
+				ItemColTaxWidth,
 				colHeight,
 				doc.encodeString("--"),
 				"0",
@@ -324,7 +324,7 @@ func (i *Item) appendColTo(options *Options, doc *Document) {
 			// tax title
 			// lastY := doc.pdf.GetY()
 			doc.pdf.CellFormat(
-				ItemColDiscountOffset-ItemColTaxOffset,
+				ItemColTaxWidth,
 				colHeight/2,
 				doc.encodeString(taxTitle),
 				"0",
@@ -345,7 +345,7 @@ func (i *Item) appendColTo(options *Options, doc *Document) {
 			)
 
 			doc.pdf.CellFormat(
-				ItemColDiscountOffset-ItemColTaxOffset,
+				ItemColTaxWidth,
 				colHeight/2,
 				doc.encodeString(taxDesc),
 				"0",
@@ -370,7 +370,7 @@ func (i *Item) appendColTo(options *Options, doc *Document) {
 	// TOTAL TTC
 	doc.pdf.SetX(ItemColTotalTTCOffset)
 	doc.pdf.CellFormat(
-		190-ItemColTotalTTCOffset,
+		ItemColTotalTTCWidth,
 		colHeight,
 		doc.encodeString(doc.ac.FormatMoneyDecimal(i.TotalWithTaxAndDiscount())),
 		"0",
