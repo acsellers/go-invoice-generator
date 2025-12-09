@@ -30,7 +30,7 @@ var (
 	ItemColNameWidth  float64 = 70
 	// ItemColUnitPriceOffset ...
 	ItemColUnitPriceOffset float64 = ItemColNameOffset + ItemColNameWidth
-	ItemColUnitPriceWidth  float64 = 43
+	ItemColUnitPriceWidth  float64 = 33
 
 	// ItemColQuantityOffset ...
 	ItemColQuantityOffset float64 = ItemColUnitPriceOffset + ItemColUnitPriceWidth
@@ -38,7 +38,7 @@ var (
 
 	// ItemColTotalHTOffset ...
 	ItemColTotalHTOffset float64 = ItemColQuantityOffset + ItemColQuantityWidth
-	ItemColTotalHTWidth  float64 = 27
+	ItemColTotalHTWidth  float64 = 17
 
 	// ItemColDiscountOffset ...
 	ItemColDiscountOffset float64 = ItemColTotalHTOffset + ItemColTotalHTWidth
