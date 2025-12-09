@@ -8,6 +8,9 @@ type Options struct {
 	AutoPrint bool   `json:"auto_print,omitempty"`
 	PageSize  string `default:"A4" json:"page_size,omitempty"`
 
+	HideDiscountColumn bool `json:"hide_discount_column,omitempty"`
+	HideTaxColumn      bool `json:"hide_tax_column,omitempty"`
+
 	CurrencySymbol    string `default:"€ " json:"currency_symbol,omitempty"`
 	CurrencyPrecision int    `default:"2" json:"currency_precision,omitempty"`
 	CurrencyDecimal   string `default:"." json:"currency_decimal,omitempty"`

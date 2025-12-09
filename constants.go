@@ -23,28 +23,39 @@ const (
 	MaxPageHeight float64 = 260
 )
 
-// Cols offsets
-const (
+// Cols offsets, add up to 190
+var (
 	// ItemColNameOffset ...
 	ItemColNameOffset float64 = 10
-
+	ItemColNameWidth  float64 = 70
 	// ItemColUnitPriceOffset ...
-	ItemColUnitPriceOffset float64 = 80
+	ItemColUnitPriceOffset float64 = ItemColNameOffset + ItemColNameWidth
+	ItemColUnitPriceWidth  float64 = 43
 
 	// ItemColQuantityOffset ...
-	ItemColQuantityOffset float64 = 103
+	ItemColQuantityOffset float64 = ItemColUnitPriceOffset + ItemColUnitPriceWidth
+	ItemColQuantityWidth  float64 = 10
 
 	// ItemColTotalHTOffset ...
-	ItemColTotalHTOffset float64 = 113
+	ItemColTotalHTOffset float64 = ItemColQuantityOffset + ItemColQuantityWidth
+	ItemColTotalHTWidth  float64 = 27
 
 	// ItemColDiscountOffset ...
-	ItemColDiscountOffset float64 = 140
+	ItemColDiscountOffset float64 = ItemColTotalHTOffset + ItemColTotalHTWidth
+	ItemColDiscountWidth  float64 = 17
 
 	// ItemColTaxOffset ...
-	ItemColTaxOffset float64 = 157
+	ItemColTaxOffset float64 = ItemColDiscountOffset + ItemColDiscountWidth
+	ItemColTaxWidth  float64 = 18
 
 	// ItemColTotalTTCOffset ...
-	ItemColTotalTTCOffset float64 = 175
+	ItemColTotalTTCOffset float64 = ItemColTaxOffset + ItemColTaxWidth
+	ItemColTotalTTCWidth  float64 = 15
+
+	ItemRowWidth               float64 = 190
+	ItemNameWidthNoTaxDiscount float64 = ItemRowWidth - (ItemColUnitPriceWidth + ItemColQuantityWidth + ItemColTotalTTCWidth)
+	ItemNameWidthNoTax         float64 = ItemRowWidth - (ItemColUnitPriceWidth + ItemColQuantityWidth + ItemColDiscountWidth + ItemColTotalTTCWidth)
+	ItemNameWidthNoDiscount    float64 = ItemRowWidth - (ItemColUnitPriceWidth + ItemColQuantityWidth + ItemColTotalHTWidth + ItemColTaxWidth + ItemColTotalTTCWidth)
 )
 
 var (
