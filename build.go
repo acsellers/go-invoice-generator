@@ -162,7 +162,7 @@ func (doc *Document) drawsTableTitles() {
 	// Name
 	doc.pdf.SetX(ItemColNameOffset)
 	doc.pdf.CellFormat(
-		ItemColUnitPriceOffset-ItemColNameOffset,
+		ItemColNameWidth,
 		6,
 		doc.encodeString(doc.Options.TextItemsNameTitle),
 		"0",
@@ -198,7 +198,7 @@ func (doc *Document) drawsTableTitles() {
 	// Unit price
 	doc.pdf.SetX(ItemColUnitPriceOffset)
 	doc.pdf.CellFormat(
-		ItemColQuantityOffset-ItemColUnitPriceOffset,
+		ItemColUnitPriceWidth,
 		6,
 		doc.encodeString(doc.Options.TextItemsUnitCostTitle),
 		"0",
@@ -212,7 +212,7 @@ func (doc *Document) drawsTableTitles() {
 	// Quantity
 	doc.pdf.SetX(ItemColQuantityOffset)
 	doc.pdf.CellFormat(
-		ItemColTaxOffset-ItemColQuantityOffset,
+		ItemColQuantityWidth,
 		6,
 		doc.encodeString(doc.Options.TextItemsQuantityTitle),
 		"0",
@@ -227,7 +227,7 @@ func (doc *Document) drawsTableTitles() {
 		// Total HT
 		doc.pdf.SetX(ItemColTotalHTOffset)
 		doc.pdf.CellFormat(
-			ItemColTaxOffset-ItemColTotalHTOffset,
+			ItemColTotalHTWidth,
 			6,
 			doc.encodeString(doc.Options.TextItemsTotalHTTitle),
 			"0",
@@ -241,7 +241,7 @@ func (doc *Document) drawsTableTitles() {
 		// Tax
 		doc.pdf.SetX(ItemColTaxOffset)
 		doc.pdf.CellFormat(
-			ItemColDiscountOffset-ItemColTaxOffset,
+			ItemColTaxWidth,
 			6,
 			doc.encodeString(doc.Options.TextItemsTaxTitle),
 			"0",
@@ -257,7 +257,7 @@ func (doc *Document) drawsTableTitles() {
 		// Discount
 		doc.pdf.SetX(ItemColDiscountOffset)
 		doc.pdf.CellFormat(
-			ItemColTotalTTCOffset-ItemColDiscountOffset,
+			ItemColDiscountWidth,
 			6,
 			doc.encodeString(doc.Options.TextItemsDiscountTitle),
 			"0",
@@ -272,7 +272,7 @@ func (doc *Document) drawsTableTitles() {
 	// TOTAL TTC
 	doc.pdf.SetX(ItemColTotalTTCOffset)
 	doc.pdf.CellFormat(
-		190-ItemColTotalTTCOffset,
+		ItemColTotalTTCWidth,
 		6,
 		doc.encodeString(doc.Options.TextItemsTotalTTCTitle),
 		"0",

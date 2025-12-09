@@ -50,7 +50,7 @@ var (
 
 	// ItemColTotalTTCOffset ...
 	ItemColTotalTTCOffset float64 = ItemColTaxOffset + ItemColTaxWidth
-	ItemColTotalTTCWidth  float64 = 15
+	ItemColTotalTTCWidth  float64 = 23
 
 	ItemRowWidth               float64 = 180
 	ItemNameWidthNoTaxDiscount float64 = ItemRowWidth - (ItemColUnitPriceWidth + ItemColQuantityWidth + ItemColTotalTTCWidth)
