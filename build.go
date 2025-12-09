@@ -277,7 +277,7 @@ func (doc *Document) drawsTableTitles() {
 		doc.encodeString(doc.Options.TextItemsTotalTTCTitle),
 		"0",
 		0,
-		"",
+		"R",
 		false,
 		0,
 		"",

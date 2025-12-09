@@ -375,7 +375,7 @@ func (i *Item) appendColTo(options *Options, doc *Document) {
 		doc.encodeString(doc.ac.FormatMoneyDecimal(i.TotalWithTaxAndDiscount())),
 		"0",
 		0,
-		"",
+		"R",
 		false,
 		0,
 		"",
