@@ -3,6 +3,11 @@
 
 Based on github.com/angelodlfrtr/go-invoice-generator
 
+* Added more note fields, more meta fields
+* Changed some formatting of Total boxes
+* Moved to the codeberg.org version of fpdf
+* Added an example that exercises most of the library in examples/extracted
+
 A super fast golang package to generate invoices, delivery notes and quotations as pdf
 using https://codeberg.org/go-pdf/fpdf.
 
