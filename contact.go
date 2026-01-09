@@ -5,7 +5,7 @@ import (
 	b64 "encoding/base64"
 	"image"
 
-	"github.com/go-pdf/fpdf"
+	"codeberg.org/go-pdf/fpdf"
 )
 
 // Contact contact a company informations
@@ -14,8 +14,8 @@ type Contact struct {
 	Logo []byte `json:"logo,omitempty"` // Logo byte array
 	Info Info   `json:"address,omitempty"`
 
-	// AddtionnalInfo to append after contact informations. You can use basic html here (bold, italic tags).
-	AddtionnalInfo []string `json:"additional_info,omitempty"`
+	// AdditionalInfo to append after contact informations. You can use basic html here (bold, italic tags).
+	AdditionalInfo []string `json:"additional_info,omitempty"`
 }
 
 type Info interface {
@@ -92,12 +92,12 @@ func (c *Contact) appendContactTODoc(
 	}
 
 	// Addtionnal info
-	if c.AddtionnalInfo != nil {
+	if c.AdditionalInfo != nil {
 		doc.pdf.SetXY(x, doc.pdf.GetY())
 		doc.pdf.SetFontSize(SmallTextFontSize)
 		doc.pdf.SetXY(x, doc.pdf.GetY()+2)
 
-		for _, line := range c.AddtionnalInfo {
+		for _, line := range c.AdditionalInfo {
 			doc.pdf.SetXY(x, doc.pdf.GetY())
 			doc.pdf.MultiCell(70, 3, doc.encodeString(line), "0", "L", false)
 		}

@@ -4,7 +4,7 @@
 Based on github.com/angelodlfrtr/go-invoice-generator
 
 A super fast golang package to generate invoices, delivery notes and quotations as pdf
-using https://github.com/go-pdf/fpdf.
+using https://codeberg.org/go-pdf/fpdf.
 
 ## Download from Github
 

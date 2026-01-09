@@ -3,8 +3,8 @@ package generator
 import (
 	"fmt"
 
+	"codeberg.org/go-pdf/fpdf"
 	"github.com/creasty/defaults"
-	"github.com/go-pdf/fpdf"
 )
 
 // HeaderFooter define header or footer informations on document

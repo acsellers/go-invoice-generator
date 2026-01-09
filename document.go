@@ -1,7 +1,7 @@
 package generator
 
 import (
-	"github.com/go-pdf/fpdf"
+	"codeberg.org/go-pdf/fpdf"
 	"github.com/leekchan/accounting"
 )
 
@@ -19,6 +19,7 @@ type Document struct {
 	ClientRef    string        `json:"client_ref,omitempty" validate:"max=64"`
 	Description  string        `json:"description,omitempty" validate:"max=1024"`
 	Notes        string        `json:"notes,omitempty"`
+	NoteList     []TitleValue  `json:"noteList,omitempty"`
 	Company      *Contact      `json:"company,omitempty" validate:"required"`
 	Customer     *Contact      `json:"customer,omitempty" validate:"required"`
 	Items        []*Item       `json:"items,omitempty"`
@@ -35,7 +36,7 @@ func (doc *Document) Pdf() *fpdf.Fpdf {
 }
 
 // SetUnicodeTranslator to use
-// See https://pkg.go.dev/github.com/go-pdf/fpdf#UnicodeTranslator
+// See https://pkg.go.dev/codeberg.org/go-pdf/fpdf#UnicodeTranslator
 func (doc *Document) SetUnicodeTranslator(fn UnicodeTranslateFunc) {
 	doc.Options.UnicodeTranslateFunc = fn
 }

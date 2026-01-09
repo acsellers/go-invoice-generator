@@ -4,8 +4,8 @@ package generator
 import (
 	"errors"
 
+	"codeberg.org/go-pdf/fpdf"
 	"github.com/creasty/defaults"
-	"github.com/go-pdf/fpdf"
 	"github.com/leekchan/accounting"
 )
 

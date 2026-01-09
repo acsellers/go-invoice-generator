@@ -24,6 +24,7 @@ type Options struct {
 	TextVersionTitle     string `default:"Version" json:"text_version_title,omitempty"`
 	TextDateTitle        string `default:"Date" json:"text_date_title,omitempty"`
 	TextPaymentTermTitle string `default:"Payment term" json:"text_payment_term_title,omitempty"`
+	TextTermsTitle       string `default:"Terms" json:"text_terms_title,omitempty"`
 
 	TextItemsNameTitle     string `default:"Name" json:"text_items_name_title,omitempty"`
 	TextItemsUnitCostTitle string `default:"Unit price" json:"text_items_unit_cost_title,omitempty"`
@@ -47,4 +48,11 @@ type Options struct {
 	BoldFont string `default:"Helvetica"`
 
 	UnicodeTranslateFunc UnicodeTranslateFunc
+
+	AdditionalMetas []TitleValue `json:"additional_metas,omitempty"`
+}
+
+type TitleValue struct {
+	Title string `json:"title"`
+	Value string `json:"value"`
 }

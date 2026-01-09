@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/go-pdf/fpdf"
+	"codeberg.org/go-pdf/fpdf"
 	"github.com/shopspring/decimal"
 )
 
@@ -80,6 +80,7 @@ func (doc *Document) Build() (*fpdf.Fpdf, error) {
 
 	// Append notes
 	doc.appendNotes()
+	doc.appendNoteList()
 
 	// Append total
 	doc.appendTotal()
@@ -113,17 +114,19 @@ func (doc *Document) appendTitle() {
 
 // appendMetas to document
 func (doc *Document) appendMetas() {
+	yOffset := float64(11)
 	// Append ref
 	refString := fmt.Sprintf("%s: %s", doc.Options.TextRefTitle, doc.Ref)
 
-	doc.pdf.SetXY(120, BaseMarginTop+11)
+	doc.pdf.SetXY(120, BaseMarginTop+yOffset)
 	doc.pdf.SetFont(doc.Options.Font, "", 8)
 	doc.pdf.CellFormat(80, 4, doc.encodeString(refString), "0", 0, "R", false, 0, "")
 
 	// Append version
 	if len(doc.Version) > 0 {
+		yOffset += 4
 		versionString := fmt.Sprintf("%s: %s", doc.Options.TextVersionTitle, doc.Version)
-		doc.pdf.SetXY(120, BaseMarginTop+15)
+		doc.pdf.SetXY(120, BaseMarginTop+yOffset)
 		doc.pdf.SetFont(doc.Options.Font, "", 8)
 		doc.pdf.CellFormat(80, 4, doc.encodeString(versionString), "0", 0, "R", false, 0, "")
 	}
@@ -134,9 +137,18 @@ func (doc *Document) appendMetas() {
 		date = doc.Date
 	}
 	dateString := fmt.Sprintf("%s: %s", doc.Options.TextDateTitle, date)
-	doc.pdf.SetXY(120, BaseMarginTop+19)
+	yOffset += 4
+	doc.pdf.SetXY(120, BaseMarginTop+yOffset)
 	doc.pdf.SetFont(doc.Options.Font, "", 8)
 	doc.pdf.CellFormat(80, 4, doc.encodeString(dateString), "0", 0, "R", false, 0, "")
+
+	for _, meta := range doc.Options.AdditionalMetas {
+		metaString := fmt.Sprintf("%s: %s", meta.Title, meta.Value)
+		yOffset += 4
+		doc.pdf.SetXY(120, BaseMarginTop+yOffset)
+		doc.pdf.SetFont(doc.Options.Font, "", 8)
+		doc.pdf.CellFormat(80, 4, doc.encodeString(metaString), "0", 0, "R", false, 0, "")
+	}
 }
 
 // appendDescription to document
@@ -334,6 +346,35 @@ func (doc *Document) appendNotes() {
 
 	doc.pdf.SetRightMargin(BaseMargin)
 	doc.pdf.SetY(currentY)
+}
+func (doc *Document) appendNoteList() {
+	if len(doc.NoteList) == 0 {
+		return
+	}
+
+	for _, note := range doc.NoteList {
+		currentY := doc.pdf.GetY()
+		if note.Title != "" {
+			doc.pdf.SetFont(doc.Options.Font, "B", 12)
+			doc.pdf.SetX(BaseMargin)
+			doc.pdf.SetRightMargin(100)
+			doc.pdf.SetY(currentY + 10)
+			doc.pdf.CellFormat(190, 10, doc.encodeString(note.Title), "0", 0, "L", false, 0, "")
+			currentY += 14
+		}
+
+		doc.pdf.SetFont(doc.Options.Font, "", 9)
+		doc.pdf.SetX(BaseMargin)
+		doc.pdf.SetRightMargin(100)
+		doc.pdf.SetY(currentY + 10)
+
+		_, lineHt := doc.pdf.GetFontSize()
+		html := doc.pdf.HTMLBasicNew()
+		html.Write(lineHt, doc.encodeString(note.Value))
+
+		doc.pdf.SetRightMargin(BaseMargin)
+		doc.pdf.SetY(currentY)
+	}
 }
 
 // appendTotal to document
