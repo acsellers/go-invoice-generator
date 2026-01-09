@@ -49,13 +49,13 @@ func (doc *Document) Build() (*fpdf.Fpdf, error) {
 	doc.appendTitle()
 
 	// Appenf document metas (ref & version)
-	doc.appendMetas()
+	metaHeight := doc.appendMetas()
 
 	// Append company contact to doc
 	companyBottom := doc.Company.appendCompanyContactToDoc(doc)
 
 	// Append customer contact to doc
-	customerBottom := doc.Customer.appendCustomerContactToDoc(doc)
+	customerBottom := doc.Customer.appendCustomerContactToDoc(doc, metaHeight)
 
 	if customerBottom > companyBottom {
 		doc.pdf.SetXY(10, customerBottom)
@@ -113,7 +113,7 @@ func (doc *Document) appendTitle() {
 }
 
 // appendMetas to document
-func (doc *Document) appendMetas() {
+func (doc *Document) appendMetas() float64 {
 	yOffset := float64(11)
 	// Append ref
 	refString := fmt.Sprintf("%s: %s", doc.Options.TextRefTitle, doc.Ref)
@@ -149,6 +149,7 @@ func (doc *Document) appendMetas() {
 		doc.pdf.SetFont(doc.Options.Font, "", 8)
 		doc.pdf.CellFormat(80, 4, doc.encodeString(metaString), "0", 0, "R", false, 0, "")
 	}
+	return yOffset + 4
 }
 
 // appendDescription to document
@@ -351,30 +352,31 @@ func (doc *Document) appendNoteList() {
 	if len(doc.NoteList) == 0 {
 		return
 	}
-
+	startY := doc.pdf.GetY()
 	for _, note := range doc.NoteList {
 		currentY := doc.pdf.GetY()
 		if note.Title != "" {
 			doc.pdf.SetFont(doc.Options.Font, "B", 12)
 			doc.pdf.SetX(BaseMargin)
 			doc.pdf.SetRightMargin(100)
-			doc.pdf.SetY(currentY + 10)
+			doc.pdf.SetY(currentY + 5)
 			doc.pdf.CellFormat(190, 10, doc.encodeString(note.Title), "0", 0, "L", false, 0, "")
-			currentY += 14
+			currentY += 8
 		}
 
 		doc.pdf.SetFont(doc.Options.Font, "", 9)
 		doc.pdf.SetX(BaseMargin)
 		doc.pdf.SetRightMargin(100)
-		doc.pdf.SetY(currentY + 10)
+		doc.pdf.SetY(currentY + 6)
 
 		_, lineHt := doc.pdf.GetFontSize()
 		html := doc.pdf.HTMLBasicNew()
 		html.Write(lineHt, doc.encodeString(note.Value))
 
 		doc.pdf.SetRightMargin(BaseMargin)
-		doc.pdf.SetY(currentY)
+
 	}
+	doc.pdf.SetY(startY)
 }
 
 // appendTotal to document
@@ -391,12 +393,14 @@ func (doc *Document) appendTotal() {
 	doc.pdf.SetX(120)
 	doc.pdf.SetFillColor(doc.Options.DarkBgColor[0], doc.Options.DarkBgColor[1], doc.Options.DarkBgColor[2])
 	doc.pdf.Rect(120, doc.pdf.GetY(), 40, 10, "F")
+	doc.pdf.SetFont(doc.Options.Font, "B", LargeTextFontSize)
 	doc.pdf.CellFormat(38, 10, doc.encodeString(doc.Options.TextTotalTotal), "0", 0, "R", false, 0, "")
 
 	// Draw TOTAL HT amount
 	doc.pdf.SetX(162)
 	doc.pdf.SetFillColor(doc.Options.GreyBgColor[0], doc.Options.GreyBgColor[1], doc.Options.GreyBgColor[2])
 	doc.pdf.Rect(160, doc.pdf.GetY(), 40, 10, "F")
+	doc.pdf.SetFont(doc.Options.Font, "", LargeTextFontSize)
 	doc.pdf.CellFormat(
 		40,
 		10,
@@ -418,6 +422,7 @@ func (doc *Document) appendTotal() {
 		doc.pdf.Rect(120, doc.pdf.GetY(), 40, 15, "F")
 
 		// title
+		doc.pdf.SetFont(doc.Options.Font, "B", LargeTextFontSize)
 		doc.pdf.CellFormat(38, 7.5, doc.encodeString(doc.Options.TextTotalDiscounted), "0", 0, "BR", false, 0, "")
 
 		// description
@@ -483,12 +488,14 @@ func (doc *Document) appendTotal() {
 		doc.pdf.SetX(120)
 		doc.pdf.SetFillColor(doc.Options.DarkBgColor[0], doc.Options.DarkBgColor[1], doc.Options.DarkBgColor[2])
 		doc.pdf.Rect(120, doc.pdf.GetY(), 40, 10, "F")
+		doc.pdf.SetFont(doc.Options.Font, "B", LargeTextFontSize)
 		doc.pdf.CellFormat(38, 10, doc.encodeString(doc.Options.TextTotalTax), "0", 0, "R", false, 0, "")
 
 		// Draw tax amount
 		doc.pdf.SetX(162)
 		doc.pdf.SetFillColor(doc.Options.GreyBgColor[0], doc.Options.GreyBgColor[1], doc.Options.GreyBgColor[2])
 		doc.pdf.Rect(160, doc.pdf.GetY(), 40, 10, "F")
+		doc.pdf.SetFont(doc.Options.Font, "", LargeTextFontSize)
 		doc.pdf.CellFormat(
 			40,
 			10,
@@ -506,16 +513,44 @@ func (doc *Document) appendTotal() {
 		doc.pdf.SetX(120)
 		doc.pdf.SetFillColor(doc.Options.DarkBgColor[0], doc.Options.DarkBgColor[1], doc.Options.DarkBgColor[2])
 		doc.pdf.Rect(120, doc.pdf.GetY(), 40, 10, "F")
+		doc.pdf.SetFont(doc.Options.Font, "B", LargeTextFontSize)
 		doc.pdf.CellFormat(38, 10, doc.encodeString(doc.Options.TextTotalWithTax), "0", 0, "R", false, 0, "")
 
 		// Draw total with tax amount
 		doc.pdf.SetX(162)
 		doc.pdf.SetFillColor(doc.Options.GreyBgColor[0], doc.Options.GreyBgColor[1], doc.Options.GreyBgColor[2])
 		doc.pdf.Rect(160, doc.pdf.GetY(), 40, 10, "F")
+		doc.pdf.SetFont(doc.Options.Font, "", LargeTextFontSize)
 		doc.pdf.CellFormat(
 			40,
 			10,
 			doc.encodeString(doc.ac.FormatMoneyDecimal(doc.TotalWithTax())),
+			"0",
+			0,
+			"L",
+			false,
+			0,
+			"",
+		)
+	}
+	for _, total := range doc.Options.AdditionalTotals {
+		// Draw total with tax title
+		doc.pdf.SetY(doc.pdf.GetY() + 10)
+		doc.pdf.SetX(120)
+		doc.pdf.SetFillColor(doc.Options.DarkBgColor[0], doc.Options.DarkBgColor[1], doc.Options.DarkBgColor[2])
+		doc.pdf.Rect(120, doc.pdf.GetY(), 40, 10, "F")
+		doc.pdf.SetFont(doc.Options.Font, "B", LargeTextFontSize)
+		doc.pdf.CellFormat(38, 10, doc.encodeString(total.Title), "0", 0, "R", false, 0, "")
+
+		// Draw total with tax amount
+		doc.pdf.SetX(162)
+		doc.pdf.SetFillColor(doc.Options.GreyBgColor[0], doc.Options.GreyBgColor[1], doc.Options.GreyBgColor[2])
+		doc.pdf.Rect(160, doc.pdf.GetY(), 40, 10, "F")
+		doc.pdf.SetFont(doc.Options.Font, "", LargeTextFontSize)
+		doc.pdf.CellFormat(
+			40,
+			10,
+			doc.encodeString(total.Value),
 			"0",
 			0,
 			"L",

@@ -49,7 +49,8 @@ type Options struct {
 
 	UnicodeTranslateFunc UnicodeTranslateFunc
 
-	AdditionalMetas []TitleValue `json:"additional_metas,omitempty"`
+	AdditionalMetas  []TitleValue `json:"additional_metas,omitempty"`
+	AdditionalTotals []TitleValue `json:"additional_totals,omitempty"`
 }
 
 type TitleValue struct {

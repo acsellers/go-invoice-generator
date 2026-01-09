@@ -116,6 +116,6 @@ func (c *Contact) appendCompanyContactToDoc(doc *Document) float64 {
 }
 
 // appendCustomerContactToDoc append the customer contact to the document
-func (c *Contact) appendCustomerContactToDoc(doc *Document) float64 {
-	return c.appendContactTODoc(130, BaseMarginTop+25, true, "R", doc)
+func (c *Contact) appendCustomerContactToDoc(doc *Document, metaHeight float64) float64 {
+	return c.appendContactTODoc(130, BaseMarginTop+metaHeight, true, "R", doc)
 }
