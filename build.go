@@ -533,9 +533,10 @@ func (doc *Document) appendTotal() {
 			"",
 		)
 	}
-	for _, total := range doc.Options.AdditionalTotals {
+	currentY := doc.pdf.GetY()
+	for i, total := range doc.Options.AdditionalTotals {
 		// Draw total with tax title
-		doc.pdf.SetY(doc.pdf.GetY() + 10)
+		doc.pdf.SetY(currentY + float64(i*10))
 		doc.pdf.SetX(120)
 		doc.pdf.SetFillColor(doc.Options.DarkBgColor[0], doc.Options.DarkBgColor[1], doc.Options.DarkBgColor[2])
 		doc.pdf.Rect(120, doc.pdf.GetY(), 40, 10, "F")
