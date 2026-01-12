@@ -29,14 +29,20 @@ func main() {
 		PageSize:           "Letter",
 		HideDiscountColumn: true,
 		HideTaxColumn:      false,
+		HideTextType:       true,
 		TextRefTitle:       "Invoice #",
 		AdditionalMetas: []generator.TitleValue{
 			{"Terms", "Net-30"},
 			{"Due", time.Now().AddDate(0, 0, 30).Format("Jan 2, 2006")},
 		},
+		CompactTotals:    true,
 		TextTotalTotal:   "Subtotal",
 		TextTotalWithTax: "Total",
 		TextTotalTax:     "Tax",
+		GreyBgColor:      []int{255, 255, 255},
+		DarkBgColor:      []int{255, 255, 255},
+		TableBgColor:     []int{32, 95, 183},
+		TableTextColor:   []int{255, 255, 255},
 	})
 	doc.SetHeader(&generator.HeaderFooter{
 		Text:       "This invoice is provided to Test Company by Awesome Company, if there are any issues, contact Reginald Monocle for corrections.",
@@ -64,7 +70,7 @@ func main() {
 
 	imgPath := "company.png"
 	if _, err := os.Stat(imgPath); os.IsNotExist(err) {
-		imgPath = "./examples/twas/company.png"
+		imgPath = "./examples/extracted/company.png"
 	}
 	var img []byte
 	if _, err := os.Stat(imgPath); err == nil {

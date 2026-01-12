@@ -16,6 +16,7 @@ type Options struct {
 	CurrencyDecimal   string `default:"." json:"currency_decimal,omitempty"`
 	CurrencyThousand  string `default:" " json:"currency_thousand,omitempty"`
 
+	HideTextType         bool   `json:"hide_text_type,omitempty"`
 	TextTypeInvoice      string `default:"INVOICE" json:"text_type_invoice,omitempty"`
 	TextTypeQuotation    string `default:"QUOTATION" json:"text_type_quotation,omitempty"`
 	TextTypeDeliveryNote string `default:"DELIVERY NOTE" json:"text_type_delivery_note,omitempty"`
@@ -34,15 +35,18 @@ type Options struct {
 	TextItemsDiscountTitle string `default:"Discount" json:"text_items_discount_title,omitempty"`
 	TextItemsTotalTTCTitle string `default:"Total" json:"text_items_total_ttc_title,omitempty"`
 
+	CompactTotals       bool   `default:"false" json:"compact_totals,omitempty"`
 	TextTotalTotal      string `default:"TOTAL" json:"text_total_total,omitempty"`
 	TextTotalDiscounted string `default:"TOTAL DISCOUNTED" json:"text_total_discounted,omitempty"`
 	TextTotalTax        string `default:"TAX" json:"text_total_tax,omitempty"`
 	TextTotalWithTax    string `default:"TOTAL WITH TAX" json:"text_total_with_tax,omitempty"`
 
-	BaseTextColor []int `default:"[35,35,35]" json:"base_text_color,omitempty"`
-	GreyTextColor []int `default:"[82,82,82]" json:"grey_text_color,omitempty"`
-	GreyBgColor   []int `default:"[232,232,232]" json:"grey_bg_color,omitempty"`
-	DarkBgColor   []int `default:"[212,212,212]" json:"dark_bg_color,omitempty"`
+	BaseTextColor  []int `default:"[35,35,35]" json:"base_text_color,omitempty"`
+	GreyTextColor  []int `default:"[82,82,82]" json:"grey_text_color,omitempty"`
+	TableBgColor   []int `default:"[232,232,232]" json:"table_bg_color,omitempty"`
+	TableTextColor []int `default:"[35,35,35]" json:"table_text_color,omitempty"`
+	GreyBgColor    []int `default:"[232,232,232]" json:"grey_bg_color,omitempty"`
+	DarkBgColor    []int `default:"[212,212,212]" json:"dark_bg_color,omitempty"`
 
 	Font     string `default:"Helvetica"`
 	BoldFont string `default:"Helvetica"`

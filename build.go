@@ -83,7 +83,11 @@ func (doc *Document) Build() (*fpdf.Fpdf, error) {
 	doc.appendNoteList()
 
 	// Append total
-	doc.appendTotal()
+	if doc.Options.CompactTotals {
+		doc.appendCompactTotal()
+	} else {
+		doc.appendTotal()
+	}
 
 	// Append payment term
 	doc.appendPaymentTerm()
@@ -98,6 +102,9 @@ func (doc *Document) Build() (*fpdf.Fpdf, error) {
 
 // appendTitle to document
 func (doc *Document) appendTitle() {
+	if doc.Options.HideTextType {
+		return
+	}
 	title := doc.typeAsString()
 
 	// Set x y
@@ -115,6 +122,9 @@ func (doc *Document) appendTitle() {
 // appendMetas to document
 func (doc *Document) appendMetas() float64 {
 	yOffset := float64(11)
+	if doc.Options.HideTextType {
+		yOffset = float64(0)
+	}
 	// Append ref
 	refString := fmt.Sprintf("%s: %s", doc.Options.TextRefTitle, doc.Ref)
 
@@ -149,6 +159,9 @@ func (doc *Document) appendMetas() float64 {
 		doc.pdf.SetFont(doc.Options.Font, "", 8)
 		doc.pdf.CellFormat(80, 4, doc.encodeString(metaString), "0", 0, "R", false, 0, "")
 	}
+	if doc.Options.HideTextType {
+		return yOffset + 12
+	}
 	return yOffset + 4
 }
 
@@ -169,10 +182,15 @@ func (doc *Document) drawsTableTitles() {
 	doc.pdf.SetFont(doc.Options.BoldFont, "B", 8)
 
 	// Draw rec
-	doc.pdf.SetFillColor(doc.Options.GreyBgColor[0], doc.Options.GreyBgColor[1], doc.Options.GreyBgColor[2])
+	doc.pdf.SetFillColor(doc.Options.TableBgColor[0], doc.Options.TableBgColor[1], doc.Options.TableBgColor[2])
 	doc.pdf.Rect(10, doc.pdf.GetY(), 190, 6, "F")
 
 	// Name
+	doc.pdf.SetTextColor(
+		doc.Options.TableTextColor[0],
+		doc.Options.TableTextColor[1],
+		doc.Options.TableTextColor[2],
+	)
 	doc.pdf.SetX(ItemColNameOffset)
 	doc.pdf.CellFormat(
 		ItemColNameWidth,
@@ -294,6 +312,12 @@ func (doc *Document) drawsTableTitles() {
 		false,
 		0,
 		"",
+	)
+
+	doc.pdf.SetTextColor(
+		doc.Options.BaseTextColor[0],
+		doc.Options.BaseTextColor[1],
+		doc.Options.BaseTextColor[2],
 	)
 }
 
@@ -551,6 +575,86 @@ func (doc *Document) appendTotal() {
 		doc.pdf.CellFormat(
 			40,
 			10,
+			doc.encodeString(total.Value),
+			"0",
+			0,
+			"L",
+			false,
+			0,
+			"",
+		)
+	}
+}
+
+// appendTotal to document
+func (doc *Document) appendCompactTotal() {
+	fields := []TitleValue{
+		{
+			Title: doc.encodeString(doc.Options.TextTotalTotal),
+			Value: doc.encodeString(doc.ac.FormatMoneyDecimal(doc.TotalWithoutTaxAndWithoutDocumentDiscount())),
+		},
+	}
+
+	if doc.Discount != nil {
+		fields = append(fields, TitleValue{
+			Title: doc.encodeString(doc.Options.TextTotalDiscounted),
+			Value: doc.encodeString(doc.ac.FormatMoneyDecimal(doc.TotalWithoutTaxAndWithoutDocumentDiscount().Sub(doc.TotalWithoutTax()))),
+		})
+		var descString bytes.Buffer
+		discountType, discountAmount := doc.Discount.getDiscount()
+		if discountType == DiscountTypePercent {
+			descString.WriteString("-")
+			descString.WriteString(discountAmount.String())
+			descString.WriteString(" % / -")
+			descString.WriteString(doc.ac.FormatMoneyDecimal(
+				doc.TotalWithoutTaxAndWithoutDocumentDiscount().Sub(doc.TotalWithoutTax())),
+			)
+		} else {
+			descString.WriteString("-")
+			descString.WriteString(doc.ac.FormatMoneyDecimal(discountAmount))
+			descString.WriteString(" / -")
+			descString.WriteString(
+				discountAmount.Mul(decimal.NewFromFloat(100)).Div(doc.TotalWithoutTaxAndWithoutDocumentDiscount()).StringFixed(2),
+			)
+			descString.WriteString(" %")
+		}
+
+		fields = append(fields, TitleValue{
+			Title: doc.encodeString(descString.String()),
+			Value: doc.encodeString(doc.ac.FormatMoneyDecimal(doc.TotalWithoutTax())),
+		})
+	}
+
+	if !doc.Options.HideTaxColumn {
+		fields = append(
+			fields,
+			TitleValue{
+				Title: doc.encodeString(doc.Options.TextTotalTax),
+				Value: doc.encodeString(doc.ac.FormatMoneyDecimal(doc.Tax())),
+			},
+			TitleValue{
+				Title: doc.encodeString(doc.Options.TextTotalWithTax),
+				Value: doc.encodeString(doc.ac.FormatMoneyDecimal(doc.TotalWithTax())),
+			},
+		)
+	}
+	fields = append(fields, doc.Options.AdditionalTotals...)
+	currentY := doc.pdf.GetY()
+	for i, total := range fields {
+		doc.pdf.SetY(currentY + float64(i)*BaseTextFontSize/2)
+		doc.pdf.SetX(120)
+		doc.pdf.SetFillColor(doc.Options.DarkBgColor[0], doc.Options.DarkBgColor[1], doc.Options.DarkBgColor[2])
+		doc.pdf.Rect(120, doc.pdf.GetY(), 40, BaseTextFontSize, "F")
+		doc.pdf.SetFont(doc.Options.Font, "B", BaseTextFontSize)
+		doc.pdf.CellFormat(38, BaseTextFontSize/2, doc.encodeString(total.Title), "0", 0, "R", false, 0, "")
+
+		doc.pdf.SetX(162)
+		doc.pdf.SetFillColor(doc.Options.GreyBgColor[0], doc.Options.GreyBgColor[1], doc.Options.GreyBgColor[2])
+		doc.pdf.Rect(160, doc.pdf.GetY(), 40, BaseTextFontSize, "F")
+		doc.pdf.SetFont(doc.Options.Font, "", BaseTextFontSize)
+		doc.pdf.CellFormat(
+			40,
+			BaseTextFontSize/2,
 			doc.encodeString(total.Value),
 			"0",
 			0,
