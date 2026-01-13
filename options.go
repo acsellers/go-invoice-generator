@@ -35,7 +35,10 @@ type Options struct {
 	TextItemsDiscountTitle string `default:"Discount" json:"text_items_discount_title,omitempty"`
 	TextItemsTotalTTCTitle string `default:"Total" json:"text_items_total_ttc_title,omitempty"`
 
-	CompactTotals       bool   `default:"false" json:"compact_totals,omitempty"`
+	CompactTotals bool    `default:"false" json:"compact_totals,omitempty"`
+	LogoHeight    float64 `default:"30" json:"logo_height,omitempty"`
+	// SingleColumn mode for the Notes/Totals Section
+	SingleColumn        bool   `default:"false" json:"single_column,omitempty"`
 	TextTotalTotal      string `default:"TOTAL" json:"text_total_total,omitempty"`
 	TextTotalDiscounted string `default:"TOTAL DISCOUNTED" json:"text_total_discounted,omitempty"`
 	TextTotalTax        string `default:"TAX" json:"text_total_tax,omitempty"`

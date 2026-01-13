@@ -78,20 +78,33 @@ func (doc *Document) Build() (*fpdf.Fpdf, error) {
 		doc.pdf.AddPage()
 	}
 
-	// Append notes
-	doc.appendNotes()
-	doc.appendNoteList()
+	if doc.Options.SingleColumn {
+		// Append total
+		if doc.Options.CompactTotals {
+			doc.appendCompactTotal()
+		} else {
+			doc.appendTotal()
+		}
+		doc.appendNotes()
+		doc.appendNoteList()
 
-	// Append total
-	if doc.Options.CompactTotals {
-		doc.appendCompactTotal()
+		// Append payment term
+		doc.appendPaymentTerm()
 	} else {
-		doc.appendTotal()
+		// Append notes
+		doc.appendNotes()
+		doc.appendNoteList()
+
+		// Append total
+		if doc.Options.CompactTotals {
+			doc.appendCompactTotal()
+		} else {
+			doc.appendTotal()
+		}
+
+		// Append payment term
+		doc.appendPaymentTerm()
 	}
-
-	// Append payment term
-	doc.appendPaymentTerm()
-
 	// Append js to autoprint if AutoPrint == true
 	if doc.Options.AutoPrint {
 		doc.pdf.SetJavascript("print(true);")
@@ -362,7 +375,11 @@ func (doc *Document) appendNotes() {
 
 	doc.pdf.SetFont(doc.Options.Font, "", 9)
 	doc.pdf.SetX(BaseMargin)
-	doc.pdf.SetRightMargin(100)
+	if doc.Options.SingleColumn {
+		doc.pdf.SetRightMargin(BaseMargin)
+	} else {
+		doc.pdf.SetRightMargin(100)
+	}
 	doc.pdf.SetY(currentY + 10)
 
 	_, lineHt := doc.pdf.GetFontSize()
@@ -382,7 +399,11 @@ func (doc *Document) appendNoteList() {
 		if note.Title != "" {
 			doc.pdf.SetFont(doc.Options.Font, "B", 12)
 			doc.pdf.SetX(BaseMargin)
-			doc.pdf.SetRightMargin(100)
+			if doc.Options.SingleColumn {
+				doc.pdf.SetRightMargin(BaseMargin)
+			} else {
+				doc.pdf.SetRightMargin(100)
+			}
 			doc.pdf.SetY(currentY + 5)
 			doc.pdf.CellFormat(190, 10, doc.encodeString(note.Title), "0", 0, "L", false, 0, "")
 			currentY += 8
@@ -390,7 +411,11 @@ func (doc *Document) appendNoteList() {
 
 		doc.pdf.SetFont(doc.Options.Font, "", 9)
 		doc.pdf.SetX(BaseMargin)
-		doc.pdf.SetRightMargin(100)
+		if doc.Options.SingleColumn {
+			doc.pdf.SetRightMargin(BaseMargin)
+		} else {
+			doc.pdf.SetRightMargin(100)
+		}
 		doc.pdf.SetY(currentY + 6)
 
 		_, lineHt := doc.pdf.GetFontSize()

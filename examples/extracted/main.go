@@ -36,6 +36,8 @@ func main() {
 			{"Due", time.Now().AddDate(0, 0, 30).Format("Jan 2, 2006")},
 		},
 		CompactTotals:    true,
+		SingleColumn:     true,
+		LogoHeight:       20,
 		TextTotalTotal:   "Subtotal",
 		TextTotalWithTax: "Total",
 		TextTotalTax:     "Tax",
@@ -44,6 +46,7 @@ func main() {
 		TableBgColor:     []int{32, 95, 183},
 		TableTextColor:   []int{255, 255, 255},
 	})
+	generator.SmallTextFontSize = 8
 	doc.SetHeader(&generator.HeaderFooter{
 		Text:       "This invoice is provided to Test Company by Awesome Company, if there are any issues, contact Reginald Monocle for corrections.",
 		Pagination: true,

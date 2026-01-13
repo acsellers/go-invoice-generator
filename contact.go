@@ -52,8 +52,8 @@ func (c *Contact) appendContactTODoc(
 		if imageInfo != nil {
 			var imageOpt fpdf.ImageOptions
 			imageOpt.ImageType = format
-			doc.pdf.ImageOptions(fileName, doc.pdf.GetX(), y, 0, 30, false, imageOpt, 0, "")
-			doc.pdf.SetY(y + 30)
+			doc.pdf.ImageOptions(fileName, doc.pdf.GetX(), y, 0, doc.Options.LogoHeight, false, imageOpt, 0, "")
+			doc.pdf.SetY(y + doc.Options.LogoHeight)
 		}
 	}
 
@@ -86,8 +86,8 @@ func (c *Contact) appendContactTODoc(
 		doc.pdf.Rect(x, doc.pdf.GetY()+9, 70, addrRectHeight, "F")
 
 		// Set address
-		doc.pdf.SetFont(doc.Options.Font, "", 10)
-		doc.pdf.SetXY(x, doc.pdf.GetY()+10)
+		doc.pdf.SetFont(doc.Options.Font, "", LargeTextFontSize)
+		doc.pdf.SetXY(x, doc.pdf.GetY()+LargeTextFontSize)
 		doc.pdf.MultiCell(70, 5, doc.encodeString(c.Info.ToString()), "0", "L", false)
 	}
 
