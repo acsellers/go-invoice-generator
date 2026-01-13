@@ -81,14 +81,14 @@ func (c *Contact) appendContactTODoc(
 
 	if c.Info != nil {
 		// Address rect
-		var addrRectHeight float64 = 5*float64(c.Info.Lines()) + 2
+		var addrRectHeight float64 = 4*float64(c.Info.Lines()) + 2
 
 		doc.pdf.Rect(x, doc.pdf.GetY()+9, 70, addrRectHeight, "F")
 
 		// Set address
 		doc.pdf.SetFont(doc.Options.Font, "", LargeTextFontSize)
 		doc.pdf.SetXY(x, doc.pdf.GetY()+LargeTextFontSize)
-		doc.pdf.MultiCell(70, 5, doc.encodeString(c.Info.ToString()), "0", "L", false)
+		doc.pdf.MultiCell(70, 4, doc.encodeString(c.Info.ToString()), "0", "L", false)
 	}
 
 	// Addtionnal info
