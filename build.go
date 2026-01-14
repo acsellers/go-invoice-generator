@@ -678,12 +678,12 @@ func (doc *Document) appendCompactTotal() {
 		doc.pdf.Rect(160, doc.pdf.GetY(), 40, BaseTextFontSize, "F")
 		doc.pdf.SetFont(doc.Options.Font, "", BaseTextFontSize)
 		doc.pdf.CellFormat(
-			40,
+			15,
 			BaseTextFontSize/2,
 			doc.encodeString(total.Value),
 			"0",
 			0,
-			"L",
+			"R",
 			false,
 			0,
 			"",
