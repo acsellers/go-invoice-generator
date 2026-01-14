@@ -169,7 +169,11 @@ func (doc *Document) appendMetas() float64 {
 		metaString := fmt.Sprintf("%s: %s", meta.Title, meta.Value)
 		yOffset += 4
 		doc.pdf.SetXY(120, BaseMarginTop+yOffset)
-		doc.pdf.SetFont(doc.Options.Font, "", 8)
+		if meta.BoldValue {
+			doc.pdf.SetFont(doc.Options.Font, "B", 8)
+		} else {
+			doc.pdf.SetFont(doc.Options.Font, "", 8)
+		}
 		doc.pdf.CellFormat(80, 4, doc.encodeString(metaString), "0", 0, "R", false, 0, "")
 	}
 	if doc.Options.HideTextType {
@@ -420,7 +424,7 @@ func (doc *Document) appendNoteList() {
 
 		_, lineHt := doc.pdf.GetFontSize()
 		html := doc.pdf.HTMLBasicNew()
-		html.Write(lineHt, doc.encodeString(note.Value))
+		html.Write(lineHt, doc.encodeString(note.Contents))
 
 		doc.pdf.SetRightMargin(BaseMargin)
 
@@ -676,7 +680,11 @@ func (doc *Document) appendCompactTotal() {
 		doc.pdf.SetX(162)
 		doc.pdf.SetFillColor(doc.Options.GreyBgColor[0], doc.Options.GreyBgColor[1], doc.Options.GreyBgColor[2])
 		doc.pdf.Rect(160, doc.pdf.GetY(), 40, BaseTextFontSize, "F")
-		doc.pdf.SetFont(doc.Options.Font, "", BaseTextFontSize)
+		if total.BoldValue {
+			doc.pdf.SetFont(doc.Options.Font, "B", BaseTextFontSize)
+		} else {
+			doc.pdf.SetFont(doc.Options.Font, "", BaseTextFontSize)
+		}
 		doc.pdf.CellFormat(
 			15,
 			BaseTextFontSize/2,

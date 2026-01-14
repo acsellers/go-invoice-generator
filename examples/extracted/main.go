@@ -11,7 +11,7 @@ import (
 
 const paymentDetails = `Please submit payment through our secure online portal:
 
-<b>https://example.securepayments.cardpointe.com/pay</b>
+<b><a href="https://example.securepayments.cardpointe.com/pay">https://example.securepayments.cardpointe.com/pay</a></b>
 
 Enter the <b>Total Amount Due $%s</b> and include the following in the Invoice Number field:
 <b>Invoice Ref: INV-%s</b>
@@ -32,8 +32,8 @@ func main() {
 		HideTextType:       true,
 		TextRefTitle:       "Invoice #",
 		AdditionalMetas: []generator.TitleValue{
-			{"Terms", "Net-30"},
-			{"Due", time.Now().AddDate(0, 0, 30).Format("Jan 2, 2006")},
+			{"Terms", "Net-30", false},
+			{"Due", time.Now().AddDate(0, 0, 30).Format("Jan 2, 2006"), true},
 		},
 		CompactTotals:    true,
 		CompactAddress:   true,
@@ -62,14 +62,14 @@ func main() {
 		"reginald.monocle@awesomecompany.com",
 	)
 	doc.SetDate(time.Now().Format("Jan 2, 2006"))
-	doc.NoteList = []generator.TitleValue{
+	doc.NoteList = []generator.TitleContents{
 		{"Payment Details", recNotes},
 		{"Notes", otherNotes},
 	}
 
 	doc.Options.AdditionalTotals = []generator.TitleValue{
-		{"Paid", "$0.00"},
-		{"Amount Due", "$497.00"},
+		{"Paid", "$0.00", false},
+		{"Amount Due", "$497.00", true},
 	}
 
 	imgPath := "company.png"

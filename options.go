@@ -62,6 +62,11 @@ type Options struct {
 }
 
 type TitleValue struct {
-	Title string `json:"title"`
-	Value string `json:"value"`
+	Title     string `json:"title"`
+	Value     string `json:"value"`
+	BoldValue bool   `json:"bold_value,omitempty"`
+}
+type TitleContents struct {
+	Title    string `json:"title"`
+	Contents string `json:"contents"`
 }
