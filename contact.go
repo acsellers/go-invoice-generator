@@ -83,12 +83,21 @@ func (c *Contact) appendContactTODoc(
 		// Address rect
 		var addrRectHeight float64 = 4*float64(c.Info.Lines()) + 2
 
-		doc.pdf.Rect(x, doc.pdf.GetY()+9, 70, addrRectHeight, "F")
-
 		// Set address
-		doc.pdf.SetFont(doc.Options.Font, "", LargeTextFontSize)
-		doc.pdf.SetXY(x, doc.pdf.GetY()+LargeTextFontSize)
-		doc.pdf.MultiCell(70, 4, doc.encodeString(c.Info.ToString()), "0", "L", false)
+		if doc.Options.CompactAddress {
+			doc.pdf.Rect(x, doc.pdf.GetY()+7, 70, addrRectHeight, "F")
+
+			doc.pdf.SetFont(doc.Options.Font, "", LargeTextFontSize)
+
+			doc.pdf.SetXY(x, doc.pdf.GetY()+BaseTextFontSize)
+			doc.pdf.MultiCell(70, 4, doc.encodeString(c.Info.ToString()), "0", "L", false)
+		} else {
+			doc.pdf.Rect(x, doc.pdf.GetY()+9, 70, addrRectHeight, "F")
+
+			doc.pdf.SetFont(doc.Options.Font, "", LargeTextFontSize)
+			doc.pdf.SetXY(x, doc.pdf.GetY()+LargeTextFontSize)
+			doc.pdf.MultiCell(70, 4, doc.encodeString(c.Info.ToString()), "0", "L", false)
+		}
 	}
 
 	// Addtionnal info
@@ -109,13 +118,84 @@ func (c *Contact) appendContactTODoc(
 	return doc.pdf.GetY()
 }
 
+// appendContactTODoc append the contact to the document
+func (c *Contact) appendCompactContactToDoc(
+	x float64,
+	y float64,
+	fill bool,
+	logoAlign string,
+	doc *Document,
+) float64 {
+	doc.pdf.SetXY(x, y)
+
+	// Logo
+	if c.Logo != nil {
+		// Create filename
+		fileName := b64.StdEncoding.EncodeToString([]byte(c.Name))
+
+		// Create reader from logo bytes
+		ioReader := bytes.NewReader(c.Logo)
+
+		// Get image format
+		_, format, _ := image.DecodeConfig(bytes.NewReader(c.Logo))
+
+		// Register image in pdf
+		imageInfo := doc.pdf.RegisterImageOptionsReader(fileName, fpdf.ImageOptions{
+			ImageType: format,
+		}, ioReader)
+
+		if imageInfo != nil {
+			var imageOpt fpdf.ImageOptions
+			imageOpt.ImageType = format
+			doc.pdf.ImageOptions(fileName, doc.pdf.GetX(), y, 0, doc.Options.LogoHeight, false, imageOpt, 0, "")
+			doc.pdf.SetY(y + doc.Options.LogoHeight)
+		}
+	}
+
+	// Set name
+	doc.pdf.SetFont(doc.Options.BoldFont, "B", 10)
+	doc.pdf.Cell(40, LargeTextFontSize, doc.encodeString(c.Name))
+	doc.pdf.SetFont(doc.Options.Font, "", 10)
+
+	if c.Info != nil {
+
+		doc.pdf.SetFont(doc.Options.Font, "", LargeTextFontSize)
+
+		doc.pdf.SetXY(x, doc.pdf.GetY()+BaseTextFontSize)
+		doc.pdf.MultiCell(70, 4, doc.encodeString(c.Info.ToString()), "0", "L", false)
+	}
+
+	// Addtionnal info
+	if c.AdditionalInfo != nil {
+		doc.pdf.SetXY(x, doc.pdf.GetY())
+		doc.pdf.SetFontSize(SmallTextFontSize)
+		doc.pdf.SetXY(x, doc.pdf.GetY()+1)
+
+		for _, line := range c.AdditionalInfo {
+			doc.pdf.SetXY(x, doc.pdf.GetY())
+			doc.pdf.MultiCell(70, 3, doc.encodeString(line), "0", "L", false)
+		}
+
+		doc.pdf.SetXY(x, doc.pdf.GetY())
+		doc.pdf.SetFontSize(BaseTextFontSize)
+	}
+
+	return doc.pdf.GetY()
+}
+
 // appendCompanyContactToDoc append the company contact to the document
 func (c *Contact) appendCompanyContactToDoc(doc *Document) float64 {
 	x, y, _, _ := doc.pdf.GetMargins()
+	if doc.Options.CompactAddress {
+		return c.appendCompactContactToDoc(x, y, true, "L", doc)
+	}
 	return c.appendContactTODoc(x, y, true, "L", doc)
 }
 
 // appendCustomerContactToDoc append the customer contact to the document
 func (c *Contact) appendCustomerContactToDoc(doc *Document, metaHeight float64) float64 {
+	if doc.Options.CompactAddress {
+		return c.appendCompactContactToDoc(130, BaseMarginTop+metaHeight, true, "R", doc)
+	}
 	return c.appendContactTODoc(130, BaseMarginTop+metaHeight, true, "R", doc)
 }

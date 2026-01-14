@@ -36,6 +36,7 @@ func main() {
 			{"Due", time.Now().AddDate(0, 0, 30).Format("Jan 2, 2006")},
 		},
 		CompactTotals:    true,
+		CompactAddress:   true,
 		SingleColumn:     true,
 		LogoHeight:       20,
 		TextTotalTotal:   "Subtotal",
