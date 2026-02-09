@@ -20,6 +20,7 @@ type Options struct {
 	TextTypeInvoice      string `default:"INVOICE" json:"text_type_invoice,omitempty"`
 	TextTypeQuotation    string `default:"QUOTATION" json:"text_type_quotation,omitempty"`
 	TextTypeDeliveryNote string `default:"DELIVERY NOTE" json:"text_type_delivery_note,omitempty"`
+	TextTypeBg           []int  `json:"text_type_bg,omitempty"`
 
 	TextRefTitle         string `default:"Ref." json:"text_ref_title,omitempty"`
 	TextVersionTitle     string `default:"Version" json:"text_version_title,omitempty"`

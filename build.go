@@ -118,13 +118,16 @@ func (doc *Document) appendTitle() {
 	if doc.Options.HideTextType {
 		return
 	}
+	if len(doc.Options.TextTypeBg) == 0 {
+		doc.Options.TextTypeBg = doc.Options.DarkBgColor
+	}
 	title := doc.typeAsString()
 
 	// Set x y
 	doc.pdf.SetXY(120, BaseMarginTop)
 
 	// Draw rect
-	doc.pdf.SetFillColor(doc.Options.DarkBgColor[0], doc.Options.DarkBgColor[1], doc.Options.DarkBgColor[2])
+	doc.pdf.SetFillColor(doc.Options.TextTypeBg[0], doc.Options.TextTypeBg[1], doc.Options.TextTypeBg[2])
 	doc.pdf.Rect(120, BaseMarginTop, 80, 10, "F")
 
 	// Draw text
